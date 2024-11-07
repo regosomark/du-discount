@@ -1,0 +1,18 @@
+# Core
+numpy
+pandas
+openpyxl
+ipykernel
+psycopg2
+requests
+
+# API
+fastapi
+fastapi[standard]
+uvicorn[standard]
+sqlalchemy
+pydantic_settings
+
+# Visualization
+matplotlib
+seaborn
