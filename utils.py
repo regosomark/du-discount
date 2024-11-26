@@ -8,53 +8,53 @@ import matplotlib.pyplot as plt
 # Get list of days of the week
 days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
-def generate_energy_summary(data, datetime_column='datetime', kwh_column='kwh', kw_column='kw'):
-    # Determine the frequency based on the time intervals in the datetime column
-    interval_seconds = data[datetime_column].diff().dt.total_seconds().median()
-    frequency = 12 if interval_seconds == 300 else 1  # 12 for 5 minutes, 1 for 1 hour
+  def generate_energy_summary(data, datetime_column='datetime', kwh_column='kwh', kw_column='kw'):
+      # Determine the frequency based on the time intervals in the datetime column
+      interval_seconds = data[datetime_column].diff().dt.total_seconds().median()
+      frequency = 12 if interval_seconds == 300 else 1  # 12 for 5 minutes, 1 for 1 hour
 
-    # Group by supply period and aggregate the necessary columns
-    energy_summary = data.groupby("supply period", sort=False).agg({
-        "supply period": "count",
-        kwh_column: "sum",
-        kw_column: "max"
-    })
+      # Group by supply period and aggregate the necessary columns
+      energy_summary = data.groupby("supply period", sort=False).agg({
+          "supply period": "count",
+          kwh_column: "sum",
+          kw_column: "max"
+      })
 
-    # Rename columns for readability
-    energy_summary.columns = ["number of intervals", "kwh", "kw"]
+      # Rename columns for readability
+      energy_summary.columns = ["number of intervals", "kwh", "kw"]
 
-    # Calculate 'number of hours' based on frequency and drop 'number of intervals'
-    energy_summary["number of hours"] = energy_summary["number of intervals"] / frequency
-    energy_summary.drop(columns=["number of intervals"], inplace=True)
+      # Calculate 'number of hours' based on frequency and drop 'number of intervals'
+      energy_summary["number of hours"] = energy_summary["number of intervals"] / frequency
+      energy_summary.drop(columns=["number of intervals"], inplace=True)
 
-    # Add a total row with the sum of kWh and the max of kW
-    energy_summary.loc["Total"] = energy_summary.sum()
-    energy_summary.loc["Total", "kw"] = energy_summary.iloc[:-1]["kw"].max()
+      # Add a total row with the sum of kWh and the max of kW
+      energy_summary.loc["Total"] = energy_summary.sum()
+      energy_summary.loc["Total", "kw"] = energy_summary.iloc[:-1]["kw"].max()
 
-    # Calculate the load factor
-    energy_summary["load factor"] = (energy_summary["kwh"] / (energy_summary['kw'] * energy_summary["number of hours"])) * 100
+      # Calculate the load factor
+      energy_summary["load factor"] = (energy_summary["kwh"] / (energy_summary['kw'] * energy_summary["number of hours"])) * 100
 
-    # Create a copy of the summary data without the Total row for statistics
-    original_energy_summary = energy_summary.iloc[:-1].copy()
+      # Create a copy of the summary data without the Total row for statistics
+      original_energy_summary = energy_summary.iloc[:-1].copy()
 
-    # Add Average, Max, Min rows based on the original data (excluding 'Total')
-    energy_summary.loc["Average"] = original_energy_summary.mean()
-    energy_summary.loc["Max"] = original_energy_summary.max()
-    energy_summary.loc["Min"] = original_energy_summary.min()
+      # Add Average, Max, Min rows based on the original data (excluding 'Total')
+      energy_summary.loc["Average"] = original_energy_summary.mean()
+      energy_summary.loc["Max"] = original_energy_summary.max()
+      energy_summary.loc["Min"] = original_energy_summary.min()
 
-    # Reset index to remove 'supply period' from being the index
-    energy_summary = energy_summary.reset_index()
+      # Reset index to remove 'supply period' from being the index
+      energy_summary = energy_summary.reset_index()
 
-    # Reorder columns as specified
-    energy_summary = energy_summary[["supply period", "number of hours", "kwh", "kw", "load factor"]]
+      # Reorder columns as specified
+      energy_summary = energy_summary[["supply period", "number of hours", "kwh", "kw", "load factor"]]
 
-    # Format columns to display numbers with 2 decimal places and comma separators
-    energy_summary["number of hours"] = energy_summary["number of hours"].apply(lambda x: "{:,.2f}".format(x))
-    energy_summary["kwh"] = energy_summary["kwh"].apply(lambda x: "{:,.2f}".format(x))
-    energy_summary["kw"] = energy_summary["kw"].apply(lambda x: "{:,.2f}".format(x))
-    energy_summary["load factor"] = energy_summary["load factor"].apply(lambda x: "{:,.2f}".format(x))
+      # Format columns to display numbers with 2 decimal places and comma separators
+      energy_summary["number of hours"] = energy_summary["number of hours"].apply(lambda x: "{:,.2f}".format(x))
+      energy_summary["kwh"] = energy_summary["kwh"].apply(lambda x: "{:,.2f}".format(x))
+      energy_summary["kw"] = energy_summary["kw"].apply(lambda x: "{:,.2f}".format(x))
+      energy_summary["load factor"] = energy_summary["load factor"].apply(lambda x: "{:,.2f}".format(x))
 
-    return energy_summary
+      return energy_summary
 
 def plot_hourly_load_curve(hourly_summary, column_name='max', unit='MW', ylabel='Peak Demand', ylim: list = None):
   if ylim is not None:
