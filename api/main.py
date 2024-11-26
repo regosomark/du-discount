@@ -1,8 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from calculator import calculate_discount
-from utilss import (get_client_load_profile, get_generation_rate_data,
-                   combine_data)
+from utilss import (get_client_load_profile, get_generation_rate_data,)
 from processing import process_energy_data, generate_energy_summary
 from models import RequestData
 import pandas as pd

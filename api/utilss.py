@@ -1,5 +1,4 @@
 import pandas as pd
-
 from database import fetch_client_load_profile, fetch_generation_rate_data
 
 def get_client_load_profile(client_name: str, start_date: str, end_date: str):

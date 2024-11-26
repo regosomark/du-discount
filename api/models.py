@@ -20,6 +20,12 @@ class RequestData(BaseModel):
     floor_price: float
     du_discount: float
 
+class DuDiscount(BaseModel):
+    floor_price: float = Field(..., ge=0)  # Non-negative floor price
+    du_discount: float = Field(..., ge=0)   # Non-negative discount
+    du_name: str #changed from du_id to du_name
+    du_discount_type: str  # Add this line to include discount type
+
 # Response model
 #class ResponseData(BaseModel):
     #supply_period: str
