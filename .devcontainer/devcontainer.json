@@ -1,0 +1,33 @@
+{
+  "name": "IO Backend",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "updateContentCommand": "bash .devcontainer/setupContainer.sh",
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": [
+        "donjayamanne.githistory",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "GitHub.copilot-labs",
+        "ecmel.vscode-html-css",
+        "ms-azuretools.vscode-docker",
+        "ms-python.autopep8",
+        "ms-python.isort",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.vscode-jupyter-cell-tags",
+        "ms-toolsai.jupyter-keymap",
+        "ms-toolsai.jupyter-renderers",
+        "ms-toolsai.vscode-jupyter-slideshow",
+        "ms-vscode.live-server",
+        "ms-vsliveshare.vsliveshare",
+        "GrapeCity.gc-excelviewer",
+        "mechatroner.rainbow-csv"
+      ]
+    }
+  }
+}
